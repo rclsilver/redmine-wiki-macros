@@ -1,0 +1,3 @@
+en:
+  label_cache: Cache timeout (seconds)
+  label_plantuml: PlantUML path

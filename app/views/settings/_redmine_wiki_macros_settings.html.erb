@@ -1,0 +1,12 @@
+<div class="tabular settings">
+	<p>
+		<label><%= l(:label_cache) %></label>
+		<%= text_field_tag("settings[cache]", @settings['cache'], :size => 10) %>
+		<br />
+	</p>
+	<p>
+		<label><%= l(:label_plantuml)%></label>
+		<%= text_field_tag("settings[plantuml]", @settings['plantuml'], :size => 90) %>
+		<br />
+	</p>
+</div>
