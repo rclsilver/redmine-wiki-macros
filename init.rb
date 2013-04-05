@@ -11,3 +11,10 @@ Redmine::Plugin.register :redmine_wiki_macros do
 			'plantuml' => '/usr/bin/plantuml',
 		 }
 end
+
+Redmine::WikiFormatting::Macros.register do
+	desc "Draw a PlantUML diagram."
+	macro :plantuml do |obj, args, text|
+		text
+	end
+end
