@@ -1,6 +1,10 @@
-== Sample plugin
+== Redmine Wiki Macros
 
-This is a sample plugin for Redmine
+This plugin adds some macros for wiki pages.
+
+=== plantuml
+
+Draws PlantUML diagrams
 
 == Installation
 
