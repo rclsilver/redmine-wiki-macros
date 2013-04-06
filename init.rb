@@ -16,7 +16,7 @@ Redmine::Plugin.register :redmine_wiki_macros do
 end
 
 Redmine::WikiFormatting::Macros.register do
-	desc "Draw a PlantUML diagram."
+	desc "Draw a PlantUML diagram. Example:\n\n  {{plantuml\nAlice -> Bob: Authentication Request\nBob --> Alice: Authentication Response\n}}"
 	macro :plantuml do |obj, args, text|
 		m = RedmineWikiMacrosHelper::PlantumlMacro.new(self, text, args, obj.respond_to?('page') ? obj.page.attachments : nil)
 		m.render()
