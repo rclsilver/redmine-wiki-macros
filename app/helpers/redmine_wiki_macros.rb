@@ -1,15 +1,15 @@
 require 'digest/sha2'
 
 module RedmineWikiMacrosHelper
-	def construct_cache_key(macro, filename)
-		return self.construct_cache_key_with_macro_name(macro.class.name.split('::').last, filename)
+	def construct_cache_key(macro, filename, extension)
+		return self.construct_cache_key_with_macro_name(macro.class.name.split('::').last, filename, extension)
 	end
 
-	def construct_cache_key_with_macro_name(macro, filename)
-		[ 'redmine_wiki_macros', macro, filename ].join('/')
+	def construct_cache_key_with_macro_name(macro, filename, extension)
+		[ 'redmine_wiki_macros', macro, filename ].join('/') + '.' + extension
 	end
 
-	def build(macro, text, args, attachments)
+	def build(macro, text, args, attachments, extension)
 		filename = Digest::SHA256::hexdigest(text)
 		expires = Setting.plugin_redmine_wiki_macros['cache'].to_i
 
@@ -17,7 +17,7 @@ module RedmineWikiMacrosHelper
 			raise 'Please set expires time under plugins settings in then "cache" parameter'
 		end
 
-		cache_key = self.construct_cache_key(macro, filename)
+		cache_key = self.construct_cache_key(macro, filename, extension)
 		content = nil
 
 		begin
@@ -50,6 +50,7 @@ module RedmineWikiMacrosHelper
 		result[:source] = text
 		result[:content] = content
 		result[:filename] = filename
+		result[:extension] = extension
 
 		return result
 	end
@@ -63,7 +64,7 @@ module RedmineWikiMacrosHelper
 			@text = text
 			@view = view
 			@view.controller.extend(RedmineWikiMacrosHelper)
-			@result = @view.controller.build(self, @text, args, attachments)
+			@result = @view.controller.build(self, @text, args, attachments, 'png')
 		end
 
 		def build()
