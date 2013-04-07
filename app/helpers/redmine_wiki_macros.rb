@@ -96,4 +96,40 @@ module RedmineWikiMacrosHelper
 			@view.controller.render_tag(@result, 'image').html_safe
 		end
 	end
+
+	class MocodoMacro
+		def initialize(view, text, args, attachments)
+			@text = text
+			@view = view
+			@view.controller.extend(RedmineWikiMacrosHelper)
+			@result = @view.controller.build(self, @text, args, attachments, 'svg')
+		end
+
+		def build()
+			require 'open4'
+
+			result = {}
+			command = Setting.plugin_redmine_wiki_macros['mocodo']
+
+			Rails.logger.debug("Executing command #{command}")
+
+			Open4::popen4(command) { |pid, fin, fout, ferr|
+				fin.puts(@text)
+				fin.close()
+
+				result[:content] = fout.read
+				result[:errors] = ferr.read
+			}
+
+			result[:status] = $?.exitstatus == 0
+
+			Rails.logger.debug("child status: sig=#{$?.termsig}, exit=#{$?.exitstatus}")
+
+			return result
+		end
+
+		def render()
+			@view.controller.render_tag(@result, 'image').html_safe
+		end
+	end
 end
